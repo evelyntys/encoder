@@ -7,9 +7,9 @@ class Main {
 
     public static void main(String[] args) {
         Main mainClass = new Main();
-        mainClass.setOffsetChar('+');
-        System.out.println(mainClass.encode("HELLO WORLD"));
-        System.out.println(mainClass.decode("*RU1KR4 JG4 U0Z"));
+        mainClass.setOffsetChar('B');
+        System.out.println(mainClass.encode("H#LLO WORLD"));
+        System.out.println(mainClass.decode("BG#KKN VNQKC"));
     }
 
     public void setOffsetChar(char offsetChar) {
@@ -19,6 +19,9 @@ class Main {
                 offsetIndex = each.getKey();
             }
         }
+    // System.out.println(offset);
+    // System.out.println(offsetIndex);i
+    // System.out.println(encodingTable(offsetIndex));
     }
 
     public Hashtable<Integer, Character> encodingTable(int offsetIndex) {
@@ -59,7 +62,7 @@ class Main {
             for (int i = 0; i < plaintext.length(); i++) {
                 if (each.getValue() == plaintext.charAt(i)) {
                     encodedArray[i] = each.getKey();
-                } else if (plaintext.charAt(i) == ' ') {
+                } else if (!baseEncodingTable.containsValue(plaintext.charAt(i))){
                     encodedArray[i] = -1;
                 }
             }
@@ -71,7 +74,7 @@ class Main {
             if (newEncodingTable.containsKey(encodedArray[i])) {
                 newString += newEncodingTable.get(encodedArray[i]);
             } else if (encodedArray[i] == -1) {
-                newString += " ";
+                newString += plaintext.charAt(i);
             }
         }
         return (offset + newString);
@@ -87,7 +90,7 @@ class Main {
             for (int i = 1; i < encodedText.length(); i++) {
                 if (each.getValue() == encodedText.charAt(i)) {
                     encodedArray[i] = each.getKey();
-                } else if (encodedText.charAt(i) == ' ') {
+                } else if (!newEncodingTable.containsValue(encodedText.charAt(i))) {
                     encodedArray[i] = -1;
                 }
             }
@@ -97,7 +100,7 @@ class Main {
             if (baseEncodingTable.containsKey(encodedArray[i])) {
                 decoded += baseEncodingTable.get(encodedArray[i]);
             } else if (encodedArray[i] == -1) {
-                decoded += " ";
+                decoded += encodedText.charAt(i);
             }
         }
         decoded = decoded.substring(1, decoded.length());
